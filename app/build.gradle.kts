@@ -26,7 +26,7 @@ android {
             buildConfig = true
         }
 
-        buildConfigField("String", "BASE_URL", "\"https://www.jsonplaceholder.org/\"")
+        buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.org\"")
     }
 
     buildTypes {
