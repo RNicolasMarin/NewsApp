@@ -3,7 +3,7 @@ package com.example.newsapp.posts.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.newsapp.core.utils.Result
+import com.example.newsapp.core.domain.Result
 import com.example.newsapp.posts.domain.repositories.PostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

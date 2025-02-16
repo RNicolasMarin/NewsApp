@@ -1,4 +1,4 @@
-package com.example.newsapp.core.utils
+package com.example.newsapp.core.domain
 
 sealed class Result<out T> {
 

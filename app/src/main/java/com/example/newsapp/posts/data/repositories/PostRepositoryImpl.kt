@@ -1,6 +1,6 @@
 package com.example.newsapp.posts.data.repositories
 
-import com.example.newsapp.core.utils.Result
+import com.example.newsapp.core.domain.Result
 import com.example.newsapp.posts.data.mappers.toPostDomainList
 import com.example.newsapp.posts.data.remote.services.PostService
 import com.example.newsapp.posts.domain.models.Post

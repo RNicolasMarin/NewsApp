@@ -1,4 +1,4 @@
-package com.example.newsapp.core.di
+package com.example.newsapp.core.data.di
 
 import com.example.newsapp.BuildConfig
 import dagger.Module
