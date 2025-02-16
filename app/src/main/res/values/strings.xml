@@ -6,4 +6,10 @@
     <string name="news_error">Error getting the news</string>
     <string name="news_retry">Retry</string>
     <string name="news_search">Search Posts</string>
+
+    <string name="detail_status">Status:</string>
+    <string name="detail_category">Category:</string>
+    <string name="detail_url">Url:</string>
+    <string name="detail_published_at">Published At:</string>
+    <string name="detail_updated_at">Updated At:</string>
 </resources>

@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.core.domain.Result
-import com.example.newsapp.posts.domain.models.Post
+import com.example.newsapp.posts.domain.models.PostSimple
 import com.example.newsapp.posts.domain.repositories.PostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +37,8 @@ class HomeViewModel @Inject constructor(
             HomeAction.SearchingValue -> {
                 searchPosts(_state.value.searching ?: "")
             }
+
+            else -> Unit
         }
     }
 
@@ -62,7 +64,7 @@ class HomeViewModel @Inject constructor(
                 _state.value.copy(
                     status = HomeStatus.LOADING,
                     filteredPosts = (0..20).map {
-                        Post(
+                        PostSimple(
                             id = it,
                             title = "",
                             content = ""

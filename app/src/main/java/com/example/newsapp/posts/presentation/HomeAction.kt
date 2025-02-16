@@ -9,4 +9,8 @@ sealed interface HomeAction {
     ): HomeAction
 
     data object SearchingValue: HomeAction
+
+    data class GoToDetail(
+        val id: Int
+    ): HomeAction
 }

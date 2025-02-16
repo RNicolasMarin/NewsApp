@@ -2,6 +2,7 @@ package com.example.newsapp.posts.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -39,17 +40,23 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.newsapp.R
 import com.example.newsapp.core.presentation.ShimmerPlaceholder
-import com.example.newsapp.posts.domain.models.Post
+import com.example.newsapp.posts.domain.models.PostSimple
+import com.example.newsapp.posts.presentation.HomeAction.GoToDetail
 import com.example.newsapp.ui.theme.NewsAppTheme
 
 @Composable
 fun HomeScreenRoot(
+    goToDetail: (Int) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     HomeScreen(
         state = state,
         onAction = { action ->
+            when (action) {
+                is GoToDetail -> goToDetail(action.id)
+                else -> Unit
+            }
             viewModel.onAction(action)
         },
     )
@@ -106,7 +113,14 @@ fun HomeScreenLoadingAndSuccess(
             PostItem(
                 post = post,
                 isLoading = state.status == HomeStatus.LOADING,
-                modifier = Modifier.fillMaxWidth().animateItem()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateItem()
+                    .clickable {
+                        if (state.status == HomeStatus.SUCCESS) {
+                            onAction(GoToDetail(post.id))
+                        }
+                    }
             )
             if (index < state.filteredPosts.size - 1) {
                 Spacer(modifier = Modifier.height(5.dp))
@@ -190,7 +204,7 @@ private fun HomeScreenError(onAction: (HomeAction) -> Unit) {
 
 @Composable
 fun PostItem(
-    post: Post,
+    post: PostSimple,
     isLoading: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -246,7 +260,7 @@ fun HomeScreenPreviewLoading() {
         HomeScreen(
             state = HomeState(
                 filteredPosts = (1..10).map {
-                    Post(
+                    PostSimple(
                         id = it,
                         title = "This is the title $it",
                         content = "This is the content $it"
@@ -265,7 +279,7 @@ fun HomeScreenPreviewError() {
         HomeScreen(
             state = HomeState(
                 filteredPosts = (1..10).map {
-                    Post(
+                    PostSimple(
                         id = it,
                         title = "This is the title $it",
                         content = "This is the content $it"
