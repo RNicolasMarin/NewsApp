@@ -12,8 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,7 +73,10 @@ fun HomeScreen(
                 HomeScreenError(onAction)
             }
             else -> { //HomeStatus.LOADING, HomeStatus.SUCCESS
-                HomeScreenLoadingAndSuccess(state)
+                HomeScreenLoadingAndSuccess(
+                    state = state,
+                    onAction = onAction
+                )
             }
         }
     }
@@ -72,27 +84,81 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenLoadingAndSuccess(
-    state: HomeState
+    state: HomeState,
+    onAction: (HomeAction) -> Unit,
 ) {
+    if (state.status == HomeStatus.SUCCESS) {
+        SearBar(
+            query = state.searching,
+            onQueryChange = { onAction(HomeAction.UpdateSearchingValue(it)) },
+            onSearch = { onAction(HomeAction.SearchingValue) },
+        )
+    }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(5.dp)
     ) {
         itemsIndexed(
-            items = state.posts,
+            items = state.filteredPosts,
             key = { _, item -> item.id }
         ) { index, post ->
             PostItem(
                 post = post,
                 isLoading = state.status == HomeStatus.LOADING,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().animateItem()
             )
-            if (index < state.posts.size - 1) {
+            if (index < state.filteredPosts.size - 1) {
                 Spacer(modifier = Modifier.height(5.dp))
             }
         }
     }
+}
+
+@Composable
+fun SearBar(
+    query: String?,
+    onQueryChange: (String) -> Unit,
+    onSearch: () -> Unit
+) {
+    OutlinedTextField(
+        value = query ?: "",
+        onValueChange = onQueryChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp),
+        placeholder = {
+            Text(text = stringResource(id = R.string.news_search))
+        },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "Search Icon"
+            )
+        },
+        trailingIcon = {
+            if (!query.isNullOrBlank()) {
+                IconButton(onClick = {
+                    onQueryChange("")
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Clear Search"
+                    )
+                }
+            }
+        },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Search
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                onSearch()
+                // Optionally, hide the keyboard here
+            }
+        )
+    )
 }
 
 @Composable
@@ -179,7 +245,7 @@ fun HomeScreenPreviewLoading() {
     NewsAppTheme {
         HomeScreen(
             state = HomeState(
-                posts = (1..10).map {
+                filteredPosts = (1..10).map {
                     Post(
                         id = it,
                         title = "This is the title $it",
@@ -198,7 +264,7 @@ fun HomeScreenPreviewError() {
     NewsAppTheme {
         HomeScreen(
             state = HomeState(
-                posts = (1..10).map {
+                filteredPosts = (1..10).map {
                     Post(
                         id = it,
                         title = "This is the title $it",

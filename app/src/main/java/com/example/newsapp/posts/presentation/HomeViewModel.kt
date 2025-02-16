@@ -31,6 +31,27 @@ class HomeViewModel @Inject constructor(
             HomeAction.RetryInitialPosts -> {
                 getInitialPosts()
             }
+            is HomeAction.UpdateSearchingValue -> {
+                searchPosts(action.value)
+            }
+            HomeAction.SearchingValue -> {
+                searchPosts(_state.value.searching ?: "")
+            }
+        }
+    }
+
+    private fun searchPosts(searching: String) {
+        viewModelScope.launch(Dispatchers.Default) {
+            val filtered = _state.value.allPosts.filter {
+                it.title.lowercase().contains(searching) ||
+                it.content.lowercase().contains(searching)
+            }
+            _state.emit(
+                _state.value.copy(
+                    searching = searching,
+                    filteredPosts = filtered
+                )
+            )
         }
     }
 
@@ -40,7 +61,7 @@ class HomeViewModel @Inject constructor(
             _state.emit(
                 _state.value.copy(
                     status = HomeStatus.LOADING,
-                    posts = (0..20).map {
+                    filteredPosts = (0..20).map {
                         Post(
                             id = it,
                             title = "",
@@ -66,7 +87,8 @@ class HomeViewModel @Inject constructor(
                             is Result.Success -> {
                                 _state.value.copy(
                                     status = HomeStatus.SUCCESS,
-                                    posts = result.data
+                                    allPosts = result.data,
+                                    filteredPosts = result.data,
                                 )
                             }
                         }
