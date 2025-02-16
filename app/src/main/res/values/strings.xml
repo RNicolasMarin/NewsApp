@@ -3,4 +3,6 @@
 
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_users">Users</string>
+    <string name="news_error">Error getting the news</string>
+    <string name="news_retry">Retry</string>
 </resources>

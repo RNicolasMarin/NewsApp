@@ -23,6 +23,18 @@ class HomeViewModel @Inject constructor(
     val state: StateFlow<HomeState> = _state
 
     init {
+        getInitialPosts()
+    }
+
+    fun onAction(action: HomeAction) {
+        when (action) {
+            HomeAction.RetryInitialPosts -> {
+                getInitialPosts()
+            }
+        }
+    }
+
+    private fun getInitialPosts() {
         viewModelScope.launch(Dispatchers.Main) {
 
             _state.emit(
