@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.core.domain.Result
+import com.example.newsapp.posts.domain.models.Post
 import com.example.newsapp.posts.domain.repositories.PostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,9 +24,17 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.Main) {
+
             _state.emit(
                 _state.value.copy(
-                    status = HomeStatus.LOADING
+                    status = HomeStatus.LOADING,
+                    posts = (0..20).map {
+                        Post(
+                            id = it,
+                            title = "",
+                            content = ""
+                        )
+                    }
                 )
             )
 

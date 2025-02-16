@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.newsapp.core.presentation.ShimmerPlaceholder
 import com.example.newsapp.posts.domain.models.Post
 import com.example.newsapp.ui.theme.NewsAppTheme
 
@@ -56,8 +57,9 @@ fun HomeScreen(
                 items = state.posts,
                 key = { _, item -> item.id }
             ) { index, post ->
-                Post(
+                PostItem(
                     post = post,
+                    isLoading = state.status == HomeStatus.LOADING,
                     modifier = Modifier.fillMaxWidth()
                 )
                 if (index < state.posts.size - 1) {
@@ -69,44 +71,53 @@ fun HomeScreen(
 }
 
 @Composable
-fun Post(
+fun PostItem(
     post: Post,
+    isLoading: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .background(
-                shape = RoundedCornerShape(5.dp),
-                color = MaterialTheme.colorScheme.primaryContainer
-            )
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(5.dp)
-            )
-            .padding(5.dp)
+    val shape = RoundedCornerShape(5.dp)
+    ShimmerPlaceholder(
+        shape = shape,
+        modifier = modifier,
+        isLoading = isLoading
     ) {
-        Text(
-            text = post.title,
-            maxLines = 2,
-            fontSize = 20.sp,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.onSurface,
-            style = TextStyle(
-                fontWeight = FontWeight.Bold
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    shape = shape,
+                    color = MaterialTheme.colorScheme.primaryContainer
+                )
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = shape
+                )
+                .padding(5.dp)
+        ) {
+            Text(
+                text = post.title,
+                maxLines = 2,
+                fontSize = 20.sp,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold
+                )
             )
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-        Text(
-            text = post.content,
-            maxLines = 5,
-            fontSize = 16.sp,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = TextStyle(
-                fontWeight = FontWeight.Medium
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(
+                text = post.content,
+                maxLines = 5,
+                fontSize = 16.sp,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = TextStyle(
+                    fontWeight = FontWeight.Medium
+                )
             )
-        )
+        }
     }
 }
 
