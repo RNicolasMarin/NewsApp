@@ -13,9 +13,9 @@ Este proyecto esta estructurado por funcionalidades y dentro de cada una esta di
 
 Capas dentro de cada funcionalidad:
 - posts
-- - - data //contiene el acceso a datos, en este caso el servicio retrofit relacionado a posts y los dtos, mappers, implementacion del repositorio y como instanciarlo con dependency injection 
-- - - domain //contiene los modelos, la interface del repositorio y casos de uso de usarlos.
-- - - presentation //contiene lo relacionado a cada pantalla: Una clase Screen en compose que representa una pantalla, su ViewModel, State y una sealed interface de Actions que ul usuario puede hacer en esas pantalla.
+- - data //contiene el acceso a datos, en este caso el servicio retrofit relacionado a posts y los dtos, mappers, implementacion del repositorio y como instanciarlo con dependency injection 
+- - domain //contiene los modelos, la interface del repositorio y casos de uso de usarlos.
+- - presentation //contiene lo relacionado a cada pantalla: Una clase Screen en compose que representa una pantalla, su ViewModel, State y una sealed interface de Actions que ul usuario puede hacer en esas pantalla.
 
 El proyecto empieza desde MainActivity con el Composable *NewsApp* que se encarga de la navegacion definiendo las 4 rutas/pantallas posibles usando un NavHost:
 - Home: Lista de Posts,
