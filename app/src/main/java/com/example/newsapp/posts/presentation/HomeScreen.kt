@@ -176,7 +176,7 @@ fun SearBar(
 }
 
 @Composable
-private fun HomeScreenError(onAction: (HomeAction) -> Unit) {
+fun HomeScreenError(onAction: (HomeAction) -> Unit) {
     Text(
         text = stringResource(id = R.string.news_error),
         fontSize = 25.sp,

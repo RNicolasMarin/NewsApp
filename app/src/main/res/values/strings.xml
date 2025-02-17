@@ -12,4 +12,10 @@
     <string name="detail_url">Url:</string>
     <string name="detail_published_at">Published At:</string>
     <string name="detail_updated_at">Updated At:</string>
+
+    <string name="users_error">Error getting the users</string>
+    <string name="users_email">Email:</string>
+    <string name="users_birth_date">Birth Date:</string>
+    <string name="users_phone">Phone:</string>
+    <string name="users_website">Website:</string>
 </resources>

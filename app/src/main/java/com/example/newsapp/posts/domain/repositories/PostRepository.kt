@@ -9,4 +9,5 @@ interface PostRepository {
     suspend fun getPosts(): Result<List<PostSimple>>
 
     suspend fun getPostDetail(id: Int): Result<PostComplete?>
+
 }
