@@ -21,6 +21,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildFeatures {
+            buildConfig = true
+        }
+
+        buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.org\"")
     }
 
     buildTypes {
@@ -32,6 +38,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -62,7 +69,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -74,4 +80,21 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+
+    //coil
+    implementation(libs.coil)
+
+    implementation(libs.play.services.maps)
+    implementation(libs.maps.compose)
+    implementation(libs.accompanist.permissions)
+
+    //Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockk)
 }
