@@ -18,4 +18,8 @@
     <string name="users_birth_date">Birth Date:</string>
     <string name="users_phone">Phone:</string>
     <string name="users_website">Website:</string>
+    <string name="users_address">Address:</string>
+    <string name="users_map">Map</string>
+
+    <string name="maps_error">Location permission is required to use Google Maps.</string>
 </resources>

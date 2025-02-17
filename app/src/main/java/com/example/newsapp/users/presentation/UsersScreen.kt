@@ -37,16 +37,17 @@ import com.example.newsapp.users.domain.models.User
 
 @Composable
 fun UsersScreenRoot(
+    goToMap: (UsersAction.GoToMap) -> Unit,
     viewModel: UsersViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     UsersScreen(
         state = state,
         onAction = { action ->
-            /*when (action) {
-                is UsersAction.RetryInitialPosts -> goToDetail(action.id)
+            when (action) {
+                is UsersAction.GoToMap -> goToMap(action)
                 else -> Unit
-            }*/
+            }
             viewModel.onAction(action)
         },
     )
@@ -96,14 +97,10 @@ fun UsersScreenLoadingAndSuccess(
             UserItem(
                 user = user,
                 isLoading = state.status == UsersStatus.LOADING,
+                onAction = onAction,
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateItem()
-                    /*.clickable {
-                        if (state.status == HomeStatus.SUCCESS) {
-                            onAction(HomeAction.GoToDetail(post.id))
-                        }
-                    }*/
             )
             if (index < state.users.size - 1) {
                 Spacer(modifier = Modifier.height(5.dp))
@@ -116,6 +113,7 @@ fun UsersScreenLoadingAndSuccess(
 fun UserItem(
     user: User,
     isLoading: Boolean,
+    onAction: (UsersAction) -> Unit,
     modifier: Modifier
 ) {
     val shape = RoundedCornerShape(5.dp)
@@ -124,7 +122,7 @@ fun UserItem(
         modifier = modifier,
         isLoading = isLoading
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
@@ -136,26 +134,48 @@ fun UserItem(
                     color = MaterialTheme.colorScheme.primary,
                     shape = shape
                 )
-                .padding(5.dp)
+                .padding(5.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "${user.firstName} ${user.lastName}",
-                maxLines = 2,
-                fontSize = 20.sp,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                Text(
+                    text = "${user.firstName} ${user.lastName}",
+                    maxLines = 2,
+                    fontSize = 20.sp,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold
+                    )
                 )
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            SimpleSection(labelRes = R.string.users_email, value = user.email)
-            Spacer(modifier = Modifier.height(5.dp))
-            SimpleSection(labelRes = R.string.users_birth_date, value = user.birthDate)
-            Spacer(modifier = Modifier.height(5.dp))
-            SimpleSection(labelRes = R.string.users_phone, value = user.phone)
-            Spacer(modifier = Modifier.height(5.dp))
-            SimpleSection(labelRes = R.string.users_website, value = user.website)
+                Spacer(modifier = Modifier.height(5.dp))
+                SimpleSection(labelRes = R.string.users_email, value = user.email)
+                Spacer(modifier = Modifier.height(5.dp))
+                SimpleSection(labelRes = R.string.users_birth_date, value = user.birthDate)
+                Spacer(modifier = Modifier.height(5.dp))
+                SimpleSection(labelRes = R.string.users_phone, value = user.phone)
+                Spacer(modifier = Modifier.height(5.dp))
+                SimpleSection(labelRes = R.string.users_website, value = user.website)
+                Spacer(modifier = Modifier.height(5.dp))
+                SimpleSection(labelRes = R.string.users_address, value = user.address.street + ", " + user.address.city)
+            }
+
+            Spacer(modifier = Modifier.width(5.dp))
+
+            Button(
+                onClick = {
+                    onAction(UsersAction.GoToMap(
+                        lat = user.address.geo.lat,
+                        long = user.address.geo.lng,
+                        city = user.address.city
+                    ))
+                }
+            ) {
+                Text(text = stringResource(id = R.string.users_map))
+            }
         }
     }
 }

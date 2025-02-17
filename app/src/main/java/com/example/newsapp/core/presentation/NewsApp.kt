@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.newsapp.core.presentation.navigation.NewsRoute
 import com.example.newsapp.core.presentation.navigation.TOP_NAVIGATION_DESTINATIONS
+import com.example.newsapp.maps.presentation.MapWithPermissions
 import com.example.newsapp.posts.presentation.DetailScreenRoot
 import com.example.newsapp.posts.presentation.HomeScreenRoot
 import com.example.newsapp.users.presentation.UsersScreenRoot
@@ -51,12 +52,33 @@ fun NewsApp(
                 DetailScreenRoot(id)
             }
             composable(NewsRoute.USERS.route) {
-                UsersScreenRoot()
+                UsersScreenRoot(
+                    goToMap = {
+                        navController.navigate("Map/${it.lat.toFloat()}/${it.long.toFloat()}/${it.city}")
+                    }
+                )
+            }
+            composable(
+                route = NewsRoute.MAPS.route,
+                arguments = listOf(
+                    navArgument("lat") { type = NavType.FloatType },
+                    navArgument("long") { type = NavType.FloatType },
+                    navArgument("city") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val lat = backStackEntry.arguments?.getFloat("lat")?.toDouble() ?: 0.0
+                val long = backStackEntry.arguments?.getFloat("long")?.toDouble() ?: 0.0
+                val city = backStackEntry.arguments?.getString("city") ?: ""
+
+                MapWithPermissions(lat = lat, long = long, city = city)
             }
         }
         val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route ?: NewsRoute.HOME.route
         if (currentDestination == NewsRoute.HOME.route || currentDestination == NewsRoute.USERS.route) {
-            NavigationBar(modifier = Modifier.weight(0.1f).fillMaxWidth()) {
+            NavigationBar(modifier = Modifier
+                .weight(0.1f)
+                .fillMaxWidth()
+            ) {
                 TOP_NAVIGATION_DESTINATIONS.forEach { destination ->
                     NavigationBarItem(
                         selected = destination == currentRoute,

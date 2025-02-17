@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.core.domain.Result
+import com.example.newsapp.users.domain.models.Address
+import com.example.newsapp.users.domain.models.Geo
 import com.example.newsapp.users.domain.models.User
 import com.example.newsapp.users.domain.repositories.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +33,7 @@ class UsersViewModel @Inject constructor(
             UsersAction.RetryUsers -> {
                 getUsers()
             }
+            else -> Unit
         }
     }
 
@@ -48,7 +51,17 @@ class UsersViewModel @Inject constructor(
                             email = "",
                             birthDate = "",
                             phone = "",
-                            website = ""
+                            website = "",
+                            address = Address(
+                                street = "",
+                                suite = "",
+                                city = "",
+                                zipcode = "",
+                                geo = Geo(
+                                    lat = 0.0,
+                                    lng = 0.0
+                                )
+                            )
                         )
                     }
                 )

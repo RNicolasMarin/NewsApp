@@ -13,6 +13,20 @@ data class UserResponse(
     val birthDate: String? = null,
     val phone: String? = null,
     val website: String? = null,
+    val address: AddressResponse? = null
+)
+
+data class AddressResponse(
+    val street: String? = null,
+    val suite: String? = null,
+    val city: String? = null,
+    val zipcode: String? = null,
+    val geo: GeoResponse? = null,
+)
+
+data class GeoResponse(
+    val lat: String? = null,
+    val lng: String? = null,
 )
 
 /*"address":{
